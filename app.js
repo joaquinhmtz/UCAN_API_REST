@@ -9,6 +9,7 @@ const AccountSchema = require("./models/account.scheme");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 require('dotenv').config();
+const GetPermissionsActiveByProfiles = require("./modules/profiles/profiles.lib").GetPermissionsActiveByProfiles;
 const port = process.env.PORT;
 
 app.secret = process.env.JWT_SECRET;
@@ -50,5 +51,6 @@ const connectDb = async () => {
 }
 
 connectDb();
+global["profiles"] = GetPermissionsActiveByProfiles();
 
 app.listen(port, ()=> console.log(`UCAN app listening on port ${port}!`))
