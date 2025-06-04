@@ -1,7 +1,7 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const UserLib = require("./../users/users.lib");
-//const ProfileLib = require("./../profiles/profiles.lib");
+const ProfileLib = require("./../profiles/profiles.lib");
 const AuthLib = require("./auth.lib");
 
 module.exports = (app, router) => {
@@ -12,7 +12,8 @@ module.exports = (app, router) => {
                     let user = await UserLib.GetUser({ _id: account.userId });
 
                     if (user) {
-                        //let profile = await ProfileLib.GetProfile({ _id: user.profile._id });
+                        let profile = await ProfileLib.GetProfileByName({ name: user.profile.name });
+                        if (!profile || profile === null) res.status(401).json({ message: "Lo sentimos, tu usuario no tiene asignado un perfil." });
                         let token = jwt.sign(user.toJSON(), app.secret, { expiresIn : "1d" });
                         //let configML = await AuthLib.GetConfigurationML();
                         //let configAmz = await AuthLib.GetConfigurationAmz();
@@ -21,7 +22,7 @@ module.exports = (app, router) => {
                             succes: true, 
                             token: token, 
                             user: user, 
-                            //profile: profile, 
+                            profile: { _id: profile._id, name: profile.name }, 
                             //tokenML: configML.lastToken,
                             //tokenAmz: configAmz.lastToken
                         });
