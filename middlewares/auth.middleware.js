@@ -11,7 +11,7 @@ const tokenValid = (request, response, next) => {
     let payload = {};
 
     try {
-        payload = jwt.verify(token, process.env.SECRET);
+        payload = jwt.verify(token, process.env.JWT_SECRET);
 
         if(payload.exp <= moment().unix()){
             return response.status(500).send({ message: 'El token ha expirado.', status: 401 });
