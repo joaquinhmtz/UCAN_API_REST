@@ -23,7 +23,7 @@ module.exports = (app, router) => {
                             return res.status(200).send({ 
                                 succes: true, 
                                 token: token, 
-                                user: user, 
+                                user: { _id: user._id, name: user.name, username: user.username }, 
                                 profile: { _id: profile._id, name: profile.name }, 
                                 //tokenML: configML.lastToken,
                                 //tokenAmz: configAmz.lastToken
