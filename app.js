@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 require('dotenv').config();
 const GetPermissionsActiveByProfiles = require("./modules/profiles/profiles.lib").GetPermissionsActiveByProfiles;
+const http = require("http").createServer(app);
 const port = process.env.PORT;
 
 app.secret = process.env.JWT_SECRET;
@@ -39,6 +40,9 @@ app.use(passport.session());
 
 
 app.use('/', router);
+app.get("/", (req, res) => {
+  res.send("¡Hola, soy el app de UCAN!");
+});
 
 const connectDb = async () => {
     try {
@@ -53,4 +57,8 @@ const connectDb = async () => {
 connectDb();
 global["profiles"] = GetPermissionsActiveByProfiles();
 
-app.listen(port, ()=> console.log(`UCAN app listening on port ${port}!`))
+http.listen(port, () => { 
+    console.log(`UCAN app listening on port ${port}`); 
+});
+
+module.exports = app;
